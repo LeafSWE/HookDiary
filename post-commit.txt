@@ -1,0 +1,118 @@
+#!/bin/sh
+
+# Allows us to read user input below, assigns stdin to keyboard
+exec < /dev/tty
+MESSAGE=$(git log -1 HEAD --pretty=format:%s) #retrieve commit message
+if [ "$MESSAGE" != "Automatic commit for diary update" ] #if not automatic commit
+then
+	USER_EMAIL=$(git log -1 --format=format:%ae HEAD) #retrieve user email
+	DATE=`date +%Y-%m-%d` #retrieve the date of modify
+	echo "commit done! your message is: $MESSAGE"
+	case $USER_EMAIL in #retrieve user by the mail
+		zanna0150@gmail.com) AUTHOR="Marco Zanella"; break;;
+		tombolato.andrea@gmail.com) AUTHOR="Andrea Tombolato"; break;;
+		octatux@gmail.com) AUTHOR="Oscar Elia Conti"; break;;
+		castel.davide@gmail.com) AUTHOR="Davide Castello"; break;;
+		bic.studio@yahoo.it) AUTHOR="Eduard Bicego"; break;;
+		federicotavella.7@gmail.com) AUTHOR="Federico Tavella"; break;;
+		black.andrighetto94@gmail.com) AUTHOR="Cristian Andrighetto"; break;;
+		* ) echo "Error"; exit;;
+	esac
+while true; do
+		read -p "Registry on the diary? (y/N) " yn
+		if [ "$yn" = "" ]; then
+			yn='n' #default answer is 'no'
+		fi
+		doc=""
+		role=""
+		currPath="$(pwd)"
+		case $yn in [Yy] )
+			#set which document
+			while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] ; do
+				exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf) " doc;
+			done;
+			#Domando il ruolo per poterlo inserire nel diario
+			while [ "$role" != "amm" ] && [ "$role" != "rp" ] && [ "$role" != "ver" ] && [ "$role" != "pr" ] && [ "$role" != "anal" ] && [ "$doc" != "cod" ] ; do
+				exec < /dev/tty; read -p "Which role do you have? (amm/rp/ver/pr/anal/cod) " role;
+			done;
+
+			#Cerco il percorso dei file da modificare per le NORME
+			if [ "$doc" = "np" ]; then
+				doc="NP"
+				docTexName="NormeProgetto.tex"
+				docPDFName="NormeProgetto.pdf"
+			#Cerco il percorso dei file da modificare per l'analisi
+			elif [ "$doc" = "ar" ]; then
+				doc="AR"
+				docTexName="AnalisiDeiRequisiti.tex"
+				docPDFName="AnalisiDeiRequisiti.pdf"
+			#Cerco il percorso dei file da modificare per il glossario
+			elif [ "$doc" = "gl" ]; then
+				doc="GLO"
+				docTexName="Glossario.tex"
+				docPDFName="Glossario.pdf"
+			elif [ "$doc" = "pp" ]; then
+				doc="PP"
+				docTexName="PianoProgetto.tex"
+				docPDFName="PianoProgetto.pdf"
+			elif [ "$doc" = "pq" ]; then
+				doc="PQ"
+				docTexName="PianoDiQualifica.tex"
+				docPDFName="PianoDiQualifica.pdf"
+			elif [ "$doc" = "sf" ]; then
+				doc="SF"
+				docTexName="StudioDiFattibilita.tex"
+				docPDFName="StudioDiFattibilita.pdf"
+			fi
+
+			diaryTexPath=$(find . -name "diarioModifiche$doc.tex") #Perocorso del diario in latex
+			docTexPath=$(find . -name "$docTexName") #Percorso del file latex da compilare
+			docPDFPath=$(find . -name "$docPDFName") #Percorso norme db
+			path=$(dirname "${docTexPath}") #Percorso della cartella
+
+			#Se il file del diario non esiste lo inizializzo
+			if [ ! -f "$path/.registroModifiche$doc.xml" ]; then #file initialization if it doesnt exists
+				echo "<registry></registry>" >> "$path/.registroModifiche$doc.xml"
+			fi
+
+			version=""
+			while [ "$version" != "y" ] && [ "$version" != "Y" ] && [ "$version" != "N" ] && [ "$version" != "n" ]; do
+				exec < /dev/tty; read -p "Augment version? (y/N) " version;
+			done; #ask if augment version->usefull for trasformation to latex
+
+			if [ "$version" = "y" ] || [ "$version" = "Y" ]; then
+				version="1"
+			else
+				version="0"
+			fi
+
+			#write on file
+			#Generate latex diary
+			echo "Updating xml diary and generating new TeX diary..";
+			perl diaryGenerator.pl "$diaryTexPath" "$path/.registroModifiche$doc.xml" "$AUTHOR" "$role" "$MESSAGE" "$DATE" "$version";
+			echo "Generation done.";
+			#Turn up and compile the new diary
+			cd $path;
+			echo "Compiling $docTexName..";
+			pdflatex -interaction=nonstopmode $docTexName > /dev/null;
+			pdflatex -interaction=nonstopmode $docTexName > /dev/null;
+			echo "Compilation done.";
+			echo "Deleting temp files from compilation..";
+			find . -name "*.gz"  -type f -delete
+			find . -name "*.dvi" -type f -delete
+			find . -name "*.log" -type f -delete
+			find . -name "*.sta" -type f -delete
+			find . -name "*.aux" -type f -delete
+			find . -name "*.lof" -type f -delete
+			find . -name "*.toc" -type f -delete
+			find . -name "*.out" -type f -delete
+			find . -name "*.gz(busy)" -type f -delete
+			echo "Deleted.";
+			cd $currPath;
+			#automatic add and commit for registry file
+			git add "$path/.registroModifiche$doc.xml" "$diaryTexPath" "$docPDFPath"; git commit -m "Automatic commit for diary update"; break;;
+			[Nn] ) exit;;
+			* ) echo "Please answer y or n for yes or no.";;
+		esac
+	done
+fi
