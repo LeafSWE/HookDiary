@@ -72,7 +72,7 @@ while true; do
 
 			#Se il file del diario non esiste lo inizializzo
 			if [ ! -f "$path/.registroModifiche$doc.xml" ]; then #file initialization if it doesnt exists
-				echo "<registry></registry>" >> "$path/.registroModifiche$doc.xml"
+				echo "<registry></registry>" >> "$path/registroModifiche$doc.xml"
 			fi
 
 			version=""
@@ -89,7 +89,7 @@ while true; do
 			#write on file
 			#Generate latex diary
 			echo "Updating xml diary and generating new TeX diary..";
-			perl diaryGenerator.pl "$diaryTexPath" "$path/.registroModifiche$doc.xml" "$AUTHOR" "$role" "$MESSAGE" "$DATE" "$version";
+			perl diaryGenerator.pl "$diaryTexPath" "$path/registroModifiche$doc.xml" "$AUTHOR" "$role" "$MESSAGE" "$DATE" "$version";
 			echo "Generation done.";
 			#Turn up and compile the new diary
 			cd $path;
@@ -110,7 +110,7 @@ while true; do
 			echo "Deleted.";
 			cd $currPath;
 			#automatic add and commit for registry file
-			git add "$path/.registroModifiche$doc.xml" "$diaryTexPath" "$docPDFPath"; git commit -m "Automatic commit for diary update"; break;;
+			git add "$path/registroModifiche$doc.xml" "$diaryTexPath" "$docPDFPath"; git commit -m "Automatic commit for diary update"; break;;
 			[Nn] ) exit;;
 			* ) echo "Please answer y or n for yes or no.";;
 		esac
