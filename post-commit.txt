@@ -29,7 +29,7 @@ while true; do
 		case $yn in [Yy] )
 			#set which document
 			while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] && [ "$doc" != "st" ]  ; do
-				exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf) " doc;
+				exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf/st) " doc;
 			done;
 			#Domando il ruolo per poterlo inserire nel diario
 			while [ "$role" != "amm" ] && [ "$role" != "rp" ] && [ "$role" != "ver" ] && [ "$role" != "pr" ] && [ "$role" != "anal" ] && [ "$doc" != "cod" ] ; do
@@ -64,7 +64,7 @@ while true; do
 				docTexName="StudioDiFattibilita.tex"
 				docPDFName="StudioDiFattibilita.pdf"
 			elif [ "$doc" = "st" ]; then
-				doc="SF"
+				doc="ST"
 				docTexName="SpecificaTecnica.tex"
 				docPDFName="SpecificaTecnica.pdf"
 			fi
@@ -93,7 +93,7 @@ while true; do
 			#write on file
 			#Generate latex diary
 			echo "Updating xml diary and generating new TeX diary..";
-			perl diaryGenerator.pl "$diaryTexPath" "$path/registroModifiche$doc.xml" "$AUTHOR" "$role" "$MESSAGE" "$DATE" "$version";
+			perl ./Documents/DiaryGenerator/diaryGenerator.pl "$diaryTexPath" "$path/registroModifiche$doc.xml" "$AUTHOR" "$role" "$MESSAGE" "$DATE" "$version";
 			echo "Generation done.";
 			#Turn up and compile the new diary
 			cd $path;
