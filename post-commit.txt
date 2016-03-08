@@ -28,7 +28,7 @@ while true; do
 		currPath="$(pwd)"
 		case $yn in [Yy] )
 			#set which document
-			while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] ; do
+			while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] && [ "$doc" != "st" ]  ; do
 				exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf) " doc;
 			done;
 			#Domando il ruolo per poterlo inserire nel diario
@@ -63,6 +63,10 @@ while true; do
 				doc="SF"
 				docTexName="StudioDiFattibilita.tex"
 				docPDFName="StudioDiFattibilita.pdf"
+			elif [ "$doc" = "st" ]; then
+				doc="SF"
+				docTexName="SpecificaTecnica.tex"
+				docPDFName="SpecificaTecnica.pdf"
 			fi
 
 			diaryTexPath=$(find . -name "diarioModifiche$doc.tex") #Perocorso del diario in latex
