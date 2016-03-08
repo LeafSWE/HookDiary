@@ -75,7 +75,7 @@ while true; do
 			path=$(dirname "${docTexPath}") #Percorso della cartella
 
 			#Se il file del diario non esiste lo inizializzo
-			if [ ! -f "$path/.registroModifiche$doc.xml" ]; then #file initialization if it doesnt exists
+			if [ ! -f "$path/registroModifiche$doc.xml" ]; then #file initialization if it doesnt exists
 				echo "<registry></registry>" >> "$path/registroModifiche$doc.xml"
 			fi
 
