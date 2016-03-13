@@ -108,13 +108,13 @@ for(my $i = $arraySize-1; $i >= 0; $i--) {
 	my $role = $modifiche[$i]->getElementsByTagName("role");
 	my $message = $modifiche[$i]->getElementsByTagName("message");
 	my $data = $modifiche[$i]->getElementsByTagName("date");
-    
-    $version = enc($version);
-    $author = enc($author);
-    $role = enc($role);
-    $message = enc($message);
-    $data = enc($data);
-    
+
+	$version = enc($version);
+	$author = enc($author);
+	$role = enc($role);
+	$message = enc($message);
+	$data = enc($data);
+
 	print $fileLatex "$version & $data & $author & $role & $message \\\\ \n";
 	if ($i != 0) {
 		print $fileLatex "\\midrule\n";
@@ -129,8 +129,7 @@ print $fileLatex "
 
 close $fileLatex;
 
-# Da USARE dopo aver prelevato il text di un nodo   
+# Da USARE dopo aver prelevato il text di un nodo
 sub enc {
    return Encode::encode('UTF-8', $_[0]);
 }
-    
