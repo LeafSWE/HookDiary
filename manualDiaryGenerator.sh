@@ -116,3 +116,6 @@ exec < /dev/tty
     find . -name "*.out" -type f -delete
     find . -name "*.gz(busy)" -type f -delete
     echo "Deleted.";
+    cd $currPath;
+    #automatic add and commit for registry file
+    git add "$path/registroModifiche$doc.xml" "$diaryTexPath" "$docPDFPath"; git commit -m "Automatic commit for diary update";
