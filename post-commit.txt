@@ -28,8 +28,8 @@ while true; do
 		currPath="$(pwd)"
 		case $yn in [Yy] )
 			#set which document
-			while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] && [ "$doc" != "st" ]  ; do
-				exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf/st) " doc;
+			while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] && [ "$doc" != "st" ] && [ "$doc" != "dp" ] ; do
+				exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf/st/dp) " doc;
 			done;
 			#Domando il ruolo per poterlo inserire nel diario
 			while [ "$role" != "amm" ] && [ "$role" != "rp" ] && [ "$role" != "ver" ] && [ "$role" != "pr" ] && [ "$role" != "anal" ] && [ "$doc" != "cod" ] ; do
