@@ -28,8 +28,8 @@ exec < /dev/tty
     role=""
     currPath="$(pwd)"
     #set which document
-    while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] && [ "$doc" != "st" ]  ; do
-        exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf/st) " doc;
+    while [ "$doc" != "ar" ] && [ "$doc" != "gl" ] && [ "$doc" != "np" ] && [ "$doc" != "pp" ] && [ "$doc" != "pq" ] && [ "$doc" != "sf" ] && [ "$doc" != "st" ] && [ "$doc" != "dp" ] ; do
+        exec < /dev/tty; read -p "Which document? (ar/gl/np/pp/pq/sf/st/dp) " doc;
     done;
     #Domando il ruolo per poterlo inserire nel diario
     while [ "$role" != "amm" ] && [ "$role" != "rp" ] && [ "$role" != "ver" ] && [ "$role" != "pr" ] && [ "$role" != "anal" ] && [ "$doc" != "cod" ] ; do
@@ -67,6 +67,10 @@ exec < /dev/tty
         doc="ST"
         docTexName="SpecificaTecnica.tex"
         docPDFName="SpecificaTecnica.pdf"
+    elif [ "$doc" = "dp" ]; then
+        doc="DP"
+        docTexName="DefinizioneDiProdotto.tex"
+        docPDFName="DefinizioneDiProdotto.pdf"
     fi
 
     diaryTexPath=$(find . -name "diarioModifiche$doc.tex") #Perocorso del diario in latex
